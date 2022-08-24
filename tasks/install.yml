@@ -9,6 +9,7 @@
         name: "{{ item }}"
         state: present
         update_cache: yes
+        lock_timeout: 300
       loop: "{{ ansible_role_hpe_ams_dependencies }}"
 
     - name: install HPE AMS
@@ -16,6 +17,7 @@
       yum:
         name: amsd
         state: present
+        lock_timeout: 300
       notify: restart_amsd
 
     - name: enable and start HPE AMS service
