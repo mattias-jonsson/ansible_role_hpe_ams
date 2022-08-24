@@ -1,0 +1,7 @@
+---
+
+- name: restart_amsd
+  become: true
+  ansible.builtin.service:
+    name: amsd
+    state: restarted

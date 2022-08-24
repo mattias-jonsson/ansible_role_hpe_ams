@@ -1,0 +1,28 @@
+---
+
+- name: install block
+  block:
+
+    - name: install dependencies
+      become: true
+      yum:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop: "{{ ansible_role_hpe_ams_dependencies }}"
+
+    - name: install HPE AMS
+      become: true
+      yum:
+        name: amsd
+        state: present
+      notify: restart_amsd
+
+    - name: enable and start HPE AMS service
+      become: true
+      ansible.builtin.service:
+        name: amsd
+        state: started
+        enabled: yes
+
+  when: '"HPE" in ansible_system_vendor and ansible_product_name is regex("ProLiant [a-zA-Z0-9]+ Gen[0-9]+")'
