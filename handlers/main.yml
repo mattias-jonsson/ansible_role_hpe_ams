@@ -1,6 +1,6 @@
 ---
 
-- name: restart_amsd
+- name: Restart_amsd
   become: true
   ansible.builtin.service:
     name: amsd

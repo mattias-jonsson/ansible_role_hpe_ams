@@ -1,30 +1,29 @@
 ---
 
-- name: install block
+- name: Install block.
+  when: '"HPE" in ansible_system_vendor and ansible_product_name is regex("ProLiant [a-zA-Z0-9]+ Gen[0-9]+")'
   block:
 
-    - name: install dependencies
+    - name: Install dependencies.
       become: true
-      yum:
+      ansible.builtin.yum:
         name: "{{ item }}"
         state: present
-        update_cache: yes
+        update_cache: true
         lock_timeout: 300
       loop: "{{ ansible_role_hpe_ams_dependencies }}"
 
-    - name: install HPE AMS
+    - name: Install HPE AMS.
       become: true
-      yum:
+      ansible.builtin.yum:
         name: amsd
         state: present
         lock_timeout: 300
-      notify: restart_amsd
+      notify: Restart_amsd
 
-    - name: enable and start HPE AMS service
+    - name: Enable and start HPE AMS service.
       become: true
       ansible.builtin.service:
         name: amsd
         state: started
-        enabled: yes
-
-  when: '"HPE" in ansible_system_vendor and ansible_product_name is regex("ProLiant [a-zA-Z0-9]+ Gen[0-9]+")'
+        enabled: true
